@@ -24,6 +24,15 @@ jobs:
           -c Release -r win-x64 -p:Platform=x64
           -o publish/Voce
 
+      - name: Show XAML compiler output on failure
+        if: failure()
+        shell: pwsh
+        run: |
+          Get-ChildItem src/Voce.App/obj -Recurse -Include output.json,*.log | ForEach-Object {
+            Write-Host "===== $($_.FullName)"
+            Get-Content $_.FullName -TotalCount 200
+          }
+
       - name: Upload portable folder
         uses: actions/upload-artifact@v4
         with:

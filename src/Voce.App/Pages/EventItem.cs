@@ -7,5 +7,5 @@ public sealed class EventItem
     public string Name { get; set; } = "";
     /// <summary>NaN means no default fee.</summary>
     public double Fee { get; set; } = double.NaN;
-    public bool IsArchived { get; set; }
+    public bool? IsArchived { get; set; } = false;
 }

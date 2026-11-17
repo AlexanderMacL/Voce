@@ -82,7 +82,7 @@ public sealed partial class EmployersPage : Page
 
     private void EventArchived_Changed(object sender, RoutedEventArgs e)
     {
-        if (sender is CheckBox { DataContext: EventItem item } box) item.IsArchived = box.IsChecked == true;
+        if (sender is CheckBox { DataContext: EventItem item } box) item.IsArchived = box.IsChecked;
     }
 
     private void RemoveEvent_Click(object sender, RoutedEventArgs e)
@@ -110,7 +110,7 @@ public sealed partial class EmployersPage : Page
         _current.IsArchived = ArchivedCheck.IsChecked == true;
         _current.Events = _events
             .Where(x => !string.IsNullOrWhiteSpace(x.Name))
-            .Select(x => new EventType { Id = x.Id, Name = x.Name.Trim(), DefaultFee = Ui.ToMoney(x.Fee), IsArchived = x.IsArchived })
+            .Select(x => new EventType { Id = x.Id, Name = x.Name.Trim(), DefaultFee = Ui.ToMoney(x.Fee), IsArchived = x.IsArchived == true })
             .ToList();
         try
         {

@@ -57,7 +57,7 @@ public sealed partial class InvoiceEditorPage : Page
         IssueDatePicker.Date = Ui.ToOffset(Ui.Today);
         DueDatePicker.Date = Ui.ToOffset(Ui.Today.AddDays(SelectedProfile?.PaymentTermsDays ?? 30));
         _linesTouched = _dueTouched = false;
-        ApplyTemplate();
+        ApplyLineTemplate();
     }
 
     private void LoadExisting(Invoice inv)
@@ -87,7 +87,7 @@ public sealed partial class InvoiceEditorPage : Page
     {
         if (_loading) return;
         RecalculateDue();
-        if (!_linesTouched) ApplyTemplate();
+        if (!_linesTouched) ApplyLineTemplate();
     }
 
     private void Employer_Changed(object sender, SelectionChangedEventArgs e)
@@ -104,17 +104,17 @@ public sealed partial class InvoiceEditorPage : Page
         _loading = true;
         EventCombo.SelectedItem = events.Count == 1 ? events[0] : null;
         _loading = false;
-        if (!_linesTouched) ApplyTemplate();
+        if (!_linesTouched) ApplyLineTemplate();
     }
 
     private void Event_Changed(object sender, SelectionChangedEventArgs e)
     {
-        if (!_loading && !_linesTouched) ApplyTemplate();
+        if (!_loading && !_linesTouched) ApplyLineTemplate();
     }
 
     private void EventDate_Changed(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
     {
-        if (!_loading && !_linesTouched) ApplyTemplate();
+        if (!_loading && !_linesTouched) ApplyLineTemplate();
     }
 
     private void IssueDate_Changed(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
@@ -137,7 +137,7 @@ public sealed partial class InvoiceEditorPage : Page
     }
 
     /// <summary>Rebuilds the first line from the selected profile's template.</summary>
-    private void ApplyTemplate()
+    private void ApplyLineTemplate()
     {
         var profile = SelectedProfile;
         var line = LineTemplate.Expand(profile?.FirstLineTemplate ?? Profile.DefaultFirstLineTemplate,
@@ -190,7 +190,7 @@ public sealed partial class InvoiceEditorPage : Page
         _linesTouched = true;
     }
 
-    private void ResetFirstLine_Click(object sender, RoutedEventArgs e) => ApplyTemplate();
+    private void ResetFirstLine_Click(object sender, RoutedEventArgs e) => ApplyLineTemplate();
 
     private void UpdateTotal()
     {
