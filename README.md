@@ -19,11 +19,15 @@ Keep the folder somewhere you can write to (not `C:\Program Files`).
 
 ## Build locally (Windows)
 
-Requires the .NET 8 SDK. Visual Studio 2022 with the *Windows application development* workload is optional.
+Requires the .NET 8 SDK and Visual Studio (or Build Tools) with the *Windows application development* workload.
+Use MSBuild for the app — the WinUI XAML compiler fails silently under `dotnet build`/`dotnet publish`.
+Run from a *Developer PowerShell*:
 
 ```
 dotnet test tests/Voce.Core.Tests
-dotnet publish src/Voce.App/Voce.App.csproj -c Release -r win-x64 -p:Platform=x64 -o publish/Voce
+msbuild src/Voce.App/Voce.App.csproj /restore /t:Publish /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64 /p:PublishDir=publish\Voce\
 ```
+
+Or open `Voce.sln` in Visual Studio, set the platform to x64 and run `Voce.App`.
 
 `Voce.Core` (database, numbering, PDF, CSV) is plain .NET 8 and builds and tests on any OS.

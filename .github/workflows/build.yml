@@ -15,25 +15,18 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - uses: microsoft/setup-msbuild@v2
+
       - name: Test core library
         run: dotnet test tests/Voce.Core.Tests/Voce.Core.Tests.csproj -c Release
 
+      # Full MSBuild is used for the WinUI app: the XAML compiler fails silently under the dotnet CLI.
       - name: Publish portable app (win-x64)
         run: >
-          dotnet publish src/Voce.App/Voce.App.csproj
-          -c Release -r win-x64 -p:Platform=x64
-          -o publish/Voce
-
-      - name: Set up MSBuild (diagnostics)
-        if: failure()
-        uses: microsoft/setup-msbuild@v2
-
-      - name: Rebuild with full MSBuild for detailed XAML errors
-        if: failure()
-        shell: pwsh
-        run: |
-          msbuild src/Voce.App/Voce.App.csproj /restore /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64 /v:minimal /nologo 2>&1 |
-            Select-String -Pattern "error|exception|WMC" | Select-Object -First 80
+          msbuild src/Voce.App/Voce.App.csproj /restore /t:Publish
+          /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64
+          /p:PublishDir=${{ github.workspace }}\publish\Voce\
+          /v:minimal /nologo
 
       - name: Upload portable folder
         uses: actions/upload-artifact@v4

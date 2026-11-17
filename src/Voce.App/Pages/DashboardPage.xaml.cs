@@ -71,7 +71,7 @@ public sealed partial class DashboardPage : Page
         var invoices = AppServices.Invoices.Invoices.GetAll(from, to);
         var s = DashboardSummary.From(invoices, Ui.Today);
         CountText.Text = s.Count.ToString();
-        TotalText.Text = Money.Format(s.TotalInvoiced);
+        TotalInvoicedText.Text = Money.Format(s.TotalInvoiced);
         PaidText.Text = Money.Format(s.TotalPaid);
         OutstandingText.Text = Money.Format(s.Outstanding);
         OverdueText.Text = s.OverdueCount > 0 ? $"{s.OverdueCount} overdue ({Money.Format(s.Overdue)})" : "";
