@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Voce.App.Pages.EmployersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Voce.App.Pages">
+    <Grid ColumnSpacing="24">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Employers" Style="{StaticResource PageTitle}" Grid.ColumnSpan="2" />
+
+        <Grid Grid.Row="1" RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Add employer" Click="Add_Click" />
+                <CheckBox x:Name="ShowArchived" Content="Show archived" Checked="ShowArchived_Toggled" Unchecked="ShowArchived_Toggled" />
+            </StackPanel>
+            <ListView x:Name="EmployerList" Grid.Row="1" SelectionChanged="EmployerList_SelectionChanged" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <StackPanel x:Name="Form" Spacing="12" MaxWidth="720" HorizontalAlignment="Left" Visibility="Collapsed">
+                <TextBox x:Name="NameBox" Header="Name" />
+                <TextBox x:Name="ContactBox" Header="Contact name" />
+                <TextBox x:Name="AddressBox" Header="Address (as printed on the invoice)" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="100" />
+                <TextBox x:Name="EmailBox" Header="Email" />
+                <TextBox x:Name="NotesBox" Header="Notes (not printed)" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60" />
+                <CheckBox x:Name="ArchivedCheck" Content="Archived (hidden when creating invoices)" />
+
+                <TextBlock Text="Events and default fees" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,8,0,0" />
+                <ItemsControl x:Name="EventsList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:EventItem">
+                            <Grid ColumnSpacing="8" Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="{x:Bind Name}" PlaceholderText="Event, e.g. Evensong" TextChanged="EventName_Changed" />
+                                <NumberBox Grid.Column="1" Value="{x:Bind Fee}" PlaceholderText="Fee (£)" Loaded="Fee_Loaded" ValueChanged="EventFee_Changed" />
+                                <CheckBox Grid.Column="2" Content="Archived" IsChecked="{x:Bind IsArchived}" Checked="EventArchived_Changed" Unchecked="EventArchived_Changed" MinWidth="0" />
+                                <Button Grid.Column="3" Click="RemoveEvent_Click" ToolTipService.ToolTip="Remove event">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button Content="Add event" Click="AddEvent_Click" />
+
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,16,0,24">
+                    <Button Content="Save" Style="{StaticResource AccentButtonStyle}" Click="Save_Click" />
+                    <Button x:Name="DeleteButton" Content="Delete employer" Click="Delete_Click" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

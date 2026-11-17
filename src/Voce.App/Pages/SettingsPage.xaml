@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Voce.App.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer>
+        <StackPanel Spacing="12" MaxWidth="760" HorizontalAlignment="Left">
+            <TextBlock Text="Settings" Style="{StaticResource PageTitle}" />
+
+            <TextBlock Text="PDF invoices" Style="{StaticResource SubtitleTextBlockStyle}" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBox x:Name="PdfFolderBox" Header="Save PDFs in" />
+                <Button Grid.Column="1" Content="Browse…" VerticalAlignment="Bottom" Click="Browse_Click" />
+                <Button Grid.Column="2" Content="Open" VerticalAlignment="Bottom" Click="OpenPdfFolder_Click" />
+            </Grid>
+            <TextBox x:Name="PatternBox" Header="File name" />
+            <TextBlock Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap">
+                Placeholders: {EMPLOYER}, {NAME} (your name), {NUMBER}, {DATE} (invoice date). ".pdf" is added automatically.
+                If the name is already used by another invoice, the invoice number is added in brackets so nothing is overwritten.
+            </TextBlock>
+            <Button Content="Save settings" Style="{StaticResource AccentButtonStyle}" Click="Save_Click" />
+
+            <TextBlock Text="Database" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,16,0,0" />
+            <TextBlock x:Name="DbPathText" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Open data folder" Click="OpenDataFolder_Click" />
+                <Button Content="Back up database…" Click="Backup_Click" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

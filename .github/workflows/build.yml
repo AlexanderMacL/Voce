@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Test core library
+        run: dotnet test tests/Voce.Core.Tests/Voce.Core.Tests.csproj -c Release
+
+      - name: Publish portable app (win-x64)
+        run: >
+          dotnet publish src/Voce.App/Voce.App.csproj
+          -c Release -r win-x64 -p:Platform=x64
+          -o publish/Voce
+
+      - name: Upload portable folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: Voce-win-x64
+          path: publish/Voce
