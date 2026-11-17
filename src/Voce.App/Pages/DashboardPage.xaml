@@ -3,7 +3,7 @@
     x:Class="Voce.App.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:models="using:Voce.Core.Models">
+    xmlns:local="using:Voce.App.Pages">
     <ScrollViewer>
         <StackPanel Spacing="16">
             <TextBlock Text="Dashboard" Style="{StaticResource PageTitle}" />
@@ -50,7 +50,7 @@
             <TextBlock x:Name="NoUnpaidText" Text="Nothing outstanding." Visibility="Collapsed" />
             <ListView x:Name="UnpaidList" SelectionMode="None" IsItemClickEnabled="True" ItemClick="Unpaid_ItemClick">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Invoice">
+                    <DataTemplate x:DataType="local:InvoiceRow">
                         <Grid ColumnSpacing="12" Padding="0,6">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140" />

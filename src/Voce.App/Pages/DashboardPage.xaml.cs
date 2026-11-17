@@ -77,13 +77,13 @@ public sealed partial class DashboardPage : Page
         OverdueText.Text = s.OverdueCount > 0 ? $"{s.OverdueCount} overdue ({Money.Format(s.Overdue)})" : "";
 
         var unpaid = AppServices.Invoices.Invoices.GetAll().Where(i => !i.IsPaid).OrderBy(i => i.DueDate).ToList();
-        UnpaidList.ItemsSource = unpaid;
+        UnpaidList.ItemsSource = unpaid.Select(i => new InvoiceRow(i)).ToList();
         NoUnpaidText.Visibility = unpaid.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void Unpaid_ItemClick(object sender, ItemClickEventArgs e)
     {
-        if (e.ClickedItem is Invoice inv) Frame.Navigate(typeof(InvoiceEditorPage), inv.Id);
+        if (e.ClickedItem is InvoiceRow row) Frame.Navigate(typeof(InvoiceEditorPage), row.Source.Id);
     }
 
     private async void ExportCsv_Click(object sender, RoutedEventArgs e)

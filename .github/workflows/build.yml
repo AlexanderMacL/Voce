@@ -24,14 +24,16 @@ jobs:
           -c Release -r win-x64 -p:Platform=x64
           -o publish/Voce
 
-      - name: Show XAML compiler output on failure
+      - name: Set up MSBuild (diagnostics)
+        if: failure()
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Rebuild with full MSBuild for detailed XAML errors
         if: failure()
         shell: pwsh
         run: |
-          Get-ChildItem src/Voce.App/obj -Recurse -Include output.json,*.log | ForEach-Object {
-            Write-Host "===== $($_.FullName)"
-            Get-Content $_.FullName -TotalCount 200
-          }
+          msbuild src/Voce.App/Voce.App.csproj /restore /p:Configuration=Release /p:Platform=x64 /p:RuntimeIdentifier=win-x64 /v:minimal /nologo 2>&1 |
+            Select-String -Pattern "error|exception|WMC" | Select-Object -First 80
 
       - name: Upload portable folder
         uses: actions/upload-artifact@v4

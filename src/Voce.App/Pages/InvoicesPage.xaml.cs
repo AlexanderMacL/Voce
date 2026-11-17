@@ -19,7 +19,7 @@ public sealed partial class InvoicesPage : Page
         InitializeComponent();
     }
 
-    private Invoice? Selected => List.SelectedItem as Invoice;
+    private Invoice? Selected => (List.SelectedItem as InvoiceRow)?.Source;
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
@@ -55,9 +55,9 @@ public sealed partial class InvoicesPage : Page
                           || i.BillToName.Contains(text, StringComparison.OrdinalIgnoreCase)
                           || i.Notes.Contains(text, StringComparison.OrdinalIgnoreCase)
                           || i.Lines.Any(l => l.Description.Contains(text, StringComparison.OrdinalIgnoreCase)));
-        var items = q.ToList();
+        var items = q.Select(i => new InvoiceRow(i)).ToList();
         List.ItemsSource = items;
-        List.SelectedItem = items.FirstOrDefault(i => i.Id == selectId);
+        List.SelectedItem = items.FirstOrDefault(r => r.Source.Id == selectId);
         UpdateButtons();
     }
 
